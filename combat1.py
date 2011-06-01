@@ -3,6 +3,10 @@
 # this is my first attempt at a python module that will simulate a combat
 # round in TnT
 
+# now i need to have it do multiple rounds of combat, keep track of hit points, and report who won
+
+
+
 import dice_roller # this is for dice rolling
 
 char1_name = 'Barry'
