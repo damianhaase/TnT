@@ -37,12 +37,12 @@ char2_weaponAdds = round(char2_MR / 2, 0)
 # personal adds
 # CN int
 
-charList = [char1, char2, char3];
 
 char1 = { 'name' : 'Barry', 'weapon' : 'Sabre', 'weapon_dice' : 3, 'weapon_adds' : 4, 'personal_adds': 4, 'CN' : 18 };
 char2 = { 'name' : 'Manticore', 'weapon' : 'Claws', 'weapon_dice' : 2, 'weapon_adds' : 0, 'personal_adds': 8, 'CN' : 18 };
 char3 = { 'name' : 'Six Pack', 'weapon' : 'Fists', 'weapon_dice' : 3, 'weapon_adds' : 0, 'personal_adds': 4, 'CN' : 24 };
 
+charList = [char1, char2, char3];
 
 print "Set sides. There are %d characters to allocate." % len(charList)
 
@@ -58,10 +58,12 @@ for character in charList:
     currentName = character['name'];
     char1_sideinput = raw_input ("%s, side a or b? " % currentName)
     if (char1_sideinput == 'a'):
-        aSide.append ( char1 ); 
-        print "side a it is!"
+        aSide.append ( currentName ); 
     elif (char1_sideinput == 'b'):
-        print "okay, side b!"
+        bSide.append ( currentName ); 
+print "the sides as they stand:"
+print "side a: %s" % aSide;
+print "side b: %s" % bSide;
 
 ######################################
 
