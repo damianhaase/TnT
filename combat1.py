@@ -39,17 +39,18 @@ import dice_roller # this is for dice rolling
 
 # character stats are dictonarys
 char1 = { 'name' : 'Barry', 'weapon' : 'Sabre', 'weapon_dice' : 3, 'weapon_adds' : 4, 'personal_adds': 4, 'CN' : 18 };
-char2 = { 'name' : 'Manticore', 'weapon' : 'Claws', 'weapon_dice' : 2, 'weapon_adds' : 0, 'personal_adds': 8, 'CN' : 18 };
+char2 = { 'name' : 'Manticore', 'weapon' : 'Claws', 'weapon_dice' : 4, 'weapon_adds' : 0, 'personal_adds': 15, 'CN' : 30 };
 char3 = { 'name' : 'Six Pack', 'weapon' : 'Fists', 'weapon_dice' : 3, 'weapon_adds' : 0, 'personal_adds': 4, 'CN' : 24 };
 
 # charlist is a list containing each character dictionary
 charList = [char1, char2, char3];
 
+print ""
 print "Set sides. There are %d characters to allocate." % len(charList)
 print "1: %s, %d personal adds, using %s, %dd6+%d, %d CN" % ( char1['name'], char1['personal_adds'], char1['weapon'], char1['weapon_dice'], char1['weapon_adds'], char1['CN'] )
 print "2: %s, %d personal adds, using %s, %dd6+%d, %d CN" % ( char2['name'], char2['personal_adds'], char2['weapon'], char2['weapon_dice'], char2['weapon_adds'], char2['CN'] )
 print "3: %s, %d personal adds, using %s, %dd6+%d, %d CN" % ( char3['name'], char3['personal_adds'], char3['weapon'], char3['weapon_dice'], char3['weapon_adds'], char3['CN'] )
-
+print ""
 
 # set up sides in battle
 ######################################
@@ -63,41 +64,70 @@ while nonZeroSides == 0:
     # each side is a list, which gets the the full dictionary for each char added
     aSide = [];
     bSide = [];
-    # name each item in the charList "character"
-    for character in charList:
-        currentName = character['name'];
+    for ch in charList:
+        currentName = ch['name'];
         char1_sideinput = raw_input ("%s, side a or b? " % currentName)
         if (char1_sideinput == 'a'):
-            aSide.append ( character ); 
+            aSide.append ( ch ); 
         elif (char1_sideinput == 'b'):
-            bSide.append ( character ); 
+            bSide.append ( ch ); 
 
     # check number of characters in sides
     if len(aSide) == 0 or len(bSide) == 0:
+        print ""
         print "need at least one character per side!"
         print "let's try again."
+        print ""
     elif len(aSide) >= 1 and len(bSide) >=1:
         nonZeroSides = 1
 
-print "the sides as they stand:"
-# run a loop through each Side list, listing the names
-print "side a: %d characters" % len(aSide)
-for character in aSide:
-   print "  %s" % character['name']
-print "side b: %d characters" % len(bSide)
-for character in bSide:
-   print "  %s" % character['name']
+print ""
+print "The sides as they stand:"
+print ""
+# run a loop through each Side list, listing the names from each dictionary
+# at the same time, add the key HP and assign it the value from CN
+print "Side a: %d characters" % len(aSide)
+for ch in aSide:
+   print "  %s" % ch['name']
+   ch.update({"HP" : ch['CN']})
+print ""
+print "Side b: %d characters" % len(bSide)
+for ch in bSide:
+   print "  %s" % ch['name']
+   ch.update({"HP" : ch['CN']})
+print ""
 
 # now we know how many characters will be one each side. 
-# next we make a copy of each character's HP
-for character in aSide:
-    print 
-
+# and we have a working HP number
 # next, we have each character roll and add the results up per side
 
+# one round first
+aSideRollTotal = 0
+for ch in aSide:
+    roll = dice_roller.multiDie( ch['weapon_dice'] , 1 )
+    print "  %s rolls %d + %d adds" % (ch['name'], roll, ch['weapon_adds'] + ch['personal_adds'])
+    aSideRollTotal = aSideRollTotal + roll + ch['weapon_adds'] + ch['personal_adds']
+print "  %d total for Side a" % aSideRollTotal
+print ""
 
+bSideRollTotal = 0
+for ch in bSide:
+    roll = dice_roller.multiDie( ch['weapon_dice'] , 1 )
+    print "  %s rolls %d + %d adds" % (ch['name'], roll, ch['weapon_adds'] + ch['personal_adds'])
+    bSideRollTotal = bSideRollTotal + roll + ch['weapon_adds'] + ch['personal_adds']
+print "  %d total for Side b" % bSideRollTotal
+print ""
 
 # then we determine how to assign the damage
+if aSideRollTotal == bSideRollTotal:
+    print "It's a draw"
+elif aSideRollTotal > bSideRollTotal:
+    hitsToAllocate = aSideRollTotal - bSideRollTotal
+    print "Side a gets %d hits on Side b." % hitsToAllocate
+elif aSideRollTotal < bSideRollTotal:
+    hitsToAllocate = bSideRollTotal - aSideRollTotal
+    print "Side b gets %d hits on Side a."  % hitsToAllocate
+    
 
 # then we decide if we want to do another combat round
 
@@ -109,15 +139,6 @@ for character in aSide:
 
 # combat results display
 ######################################
-
-# print "This will simulate multiple combat rounds between the following characters:"
-# print "%s, Human, %d personal adds, %d HP, using %s %dD6+%d" % (char1_name, char1_persAdds, char1_CN, char1_weapon, char1_weaponDice, char1_weaponAdds)
-# print "vs."
-# print "%s, MR %d, %dD6+%d, %d HP" % (char2_name, char2_MR, char2_weaponDice, char2_weaponAdds, char2_MR)
-
-# make copies of CN and MR to decrement
-# char1_HP = char1_CN
-# char2_HP = char2_MR
 
 # while either character's HP > 0, run the combat round loop
 # round = 1
