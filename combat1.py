@@ -37,11 +37,12 @@ import dice_roller # this is for dice rolling
 # personal adds
 # CN int
 
-
+# character stats are dictonarys
 char1 = { 'name' : 'Barry', 'weapon' : 'Sabre', 'weapon_dice' : 3, 'weapon_adds' : 4, 'personal_adds': 4, 'CN' : 18 };
 char2 = { 'name' : 'Manticore', 'weapon' : 'Claws', 'weapon_dice' : 2, 'weapon_adds' : 0, 'personal_adds': 8, 'CN' : 18 };
 char3 = { 'name' : 'Six Pack', 'weapon' : 'Fists', 'weapon_dice' : 3, 'weapon_adds' : 0, 'personal_adds': 4, 'CN' : 24 };
 
+# charlist is a list containing each character dictionary
 charList = [char1, char2, char3];
 
 print "Set sides. There are %d characters to allocate." % len(charList)
@@ -52,26 +53,56 @@ print "3: %s, %d personal adds, using %s, %dd6+%d, %d CN" % ( char3['name'], cha
 
 # set up sides in battle
 ######################################
-# inititalize the side lists
-aSide = [];
-bSide = [];
 
-for character in charList:
-    currentName = character['name'];
-    char1_sideinput = raw_input ("%s, side a or b? " % currentName)
-    if (char1_sideinput == 'a'):
-       aSide.append ( currentName ); 
-    elif (char1_sideinput == 'b'):
-       bSide.append ( currentName ); 
+# set a variable to determine if each side has at least one character
+nonZeroSides = 0
+
+# do this loop until nonZeroSides is 1
+while nonZeroSides == 0:
+    # initialize the side lists
+    # each side is a list, which gets the the full dictionary for each char added
+    aSide = [];
+    bSide = [];
+    # name each item in the charList "character"
+    for character in charList:
+        currentName = character['name'];
+        char1_sideinput = raw_input ("%s, side a or b? " % currentName)
+        if (char1_sideinput == 'a'):
+            aSide.append ( character ); 
+        elif (char1_sideinput == 'b'):
+            bSide.append ( character ); 
+
+    # check number of characters in sides
+    if len(aSide) == 0 or len(bSide) == 0:
+        print "need at least one character per side!"
+        print "let's try again."
+    elif len(aSide) >= 1 and len(bSide) >=1:
+        nonZeroSides = 1
+
 print "the sides as they stand:"
 # run a loop through each Side list, listing the names
 print "side a: %d characters" % len(aSide)
-for participants in aSide:
-   print "  %s" % participants
+for character in aSide:
+   print "  %s" % character['name']
 print "side b: %d characters" % len(bSide)
-for participants in bSide:
-   print "  %s" % participants
-    
+for character in bSide:
+   print "  %s" % character['name']
+
+# now we know how many characters will be one each side. 
+# next we make a copy of each character's HP
+for character in aSide:
+    print 
+
+# next, we have each character roll and add the results up per side
+
+
+
+# then we determine how to assign the damage
+
+# then we decide if we want to do another combat round
+
+
+
 ######################################
 
 
